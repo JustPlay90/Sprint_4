@@ -6,55 +6,43 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import pageobjects.ManePage;
 
 import java.time.Duration;
 
-import static pageobjects.ManePage.*;
-
 @RunWith(Parameterized.class)
 public class FaqTest {
     private WebDriver driver;
 
-    private final By question;
-    private final By answer;
-    private final String answerText;
+    private int num;
+    private String answer;
 
-    public FaqTest(By question, By answer, String answerText) {
-        this.question = question;
+    public FaqTest(int num, String answer) {
+        this.num = num;
         this.answer = answer;
-        this.answerText = answerText;
     }
 
 
     @Parameterized.Parameters
     public static Object[][] getTestData(){
         return new Object[][] {
-                {question1,answer1,answer1Text},
-                {question2,answer2,answer2Text},
-                {question3,answer3,answer3Text},
-                {question4,answer4,answer4Text},
-                {question5,answer5,answer5Text},
-                {question6,answer6,answer6Text},
-                {question7,answer7,answer7Text},
-                {question8,answer8,answer8Text}
+                {0,"Сутки — 400 рублей. Оплата курьеру — наличными или картой."},
+                {1,"Пока что у нас так: один заказ — один самокат. Если хотите покататься с друзьями, можете просто сделать несколько заказов — один за другим."},
+                {2,"Допустим, вы оформляете заказ на 8 мая. Мы привозим самокат 8 мая в течение дня. Отсчёт времени аренды начинается с момента, когда вы оплатите заказ курьеру. Если мы привезли самокат 8 мая в 20:30, суточная аренда закончится 9 мая в 20:30."},
         };
 
     }
     @Before
     public void startDriver() throws InterruptedException {
-       /* ChromeOptions chromeOptions = new ChromeOptions();
-        chromeOptions.addArguments("--start-maximized", "--no-sandbox", "--headless", "--disable-dev-shm-usage", "--start-maximized");
-        driver = new ChromeDriver(chromeOptions);*/
-         FirefoxOptions firefoxOptions = new FirefoxOptions();
-        firefoxOptions.addArguments("--kiosk", "--no-sandbox", "--headless", "--disable-dev-shm-usage", "--start-maximized");
-        driver = new FirefoxDriver(firefoxOptions);
+        //testFireFoxBrowser();
+        testChromeBrowser();
         ManePage manePage = new ManePage(driver);
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(15));
         driver.get("https://qa-scooter.praktikum-services.ru/");
         manePage.closeCookie();
     }
@@ -68,8 +56,20 @@ public class FaqTest {
     @Test
     public void textTest() throws InterruptedException {
         ManePage manePage = new ManePage(driver);
-        manePage.clickQuestion(question);
-        String actualText = manePage.getTest(answer);
-        Assert.assertEquals("Не совпадает текст ответа",answerText, actualText);
+        manePage.clickQuestion(num);
+        String actualText = manePage.getText(num);
+        Assert.assertEquals("Не совпадает текст ответа",answer, actualText);
+    }
+
+    private void testChromeBrowser(){
+        ChromeOptions chromeOptions = new ChromeOptions();
+        chromeOptions.addArguments("--start-maximized", "--no-sandbox","--disable-dev-shm-usage");
+        driver = new ChromeDriver(chromeOptions);
+    }
+
+    private void testFireFoxBrowser(){
+        FirefoxOptions firefoxOptions = new FirefoxOptions();
+        firefoxOptions.addArguments("--kiosk","--no-sandbox","--disable-dev-shm-usage");
+        driver = new FirefoxDriver(firefoxOptions);
     }
 }

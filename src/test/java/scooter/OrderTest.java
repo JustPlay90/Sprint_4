@@ -7,6 +7,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import pageobjects.ManePage;
@@ -58,16 +60,13 @@ public class OrderTest {
     }
     @Before
     public void startDriver() throws InterruptedException {
-       /* ChromeOptions chromeOptions = new ChromeOptions();
-        chromeOptions.addArguments("--start-maximized", "--no-sandbox", "--headless", "--disable-dev-shm-usage", "--start-maximized");
-        driver = new ChromeDriver(chromeOptions);*/
-         FirefoxOptions firefoxOptions = new FirefoxOptions();
-        firefoxOptions.addArguments("--kiosk","--no-sandbox", "--headless", "--disable-dev-shm-usage", "--start-maximized");
-        driver = new FirefoxDriver(firefoxOptions);
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-        driver.get("https://qa-scooter.praktikum-services.ru/");
-        ManePage manePage = new ManePage(driver);
-        manePage.closeCookie();
+            //testFireFoxBrowser();
+            testChromeBrowser();
+            driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(15));
+            driver.get("https://qa-scooter.praktikum-services.ru/");
+            ManePage manePage = new ManePage(driver);
+            manePage.closeCookie();
+
     }
 
     @After
@@ -90,5 +89,17 @@ public class OrderTest {
         orderPage.clickConfirmationButton();
         //проверить что отображается текст :"Заказ оформлен"
         Assert.assertTrue("Окно не активно",orderPage.checkConfirmationIsActive());
+    }
+
+    private void testChromeBrowser(){
+        ChromeOptions chromeOptions = new ChromeOptions();
+        chromeOptions.addArguments("--start-maximized", "--no-sandbox","--disable-dev-shm-usage");
+        driver = new ChromeDriver(chromeOptions);
+    }
+
+    private void testFireFoxBrowser(){
+        FirefoxOptions firefoxOptions = new FirefoxOptions();
+        firefoxOptions.addArguments("--kiosk","--no-sandbox","--disable-dev-shm-usage");
+        driver = new FirefoxDriver(firefoxOptions);
     }
 }
