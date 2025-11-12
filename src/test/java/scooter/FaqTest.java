@@ -7,10 +7,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.firefox.FirefoxOptions;
+import pageobjects.BroserSettings;
 import pageobjects.ManePage;
 
 import java.time.Duration;
@@ -18,6 +15,7 @@ import java.time.Duration;
 @RunWith(Parameterized.class)
 public class FaqTest {
     private WebDriver driver;
+    private BroserSettings broserSettings;
 
     private int num;
     private String answer;
@@ -39,8 +37,8 @@ public class FaqTest {
     }
     @Before
     public void startDriver() throws InterruptedException {
-        //testFireFoxBrowser();
-        testChromeBrowser();
+        //driver = broserSettings.testFireFoxBrowser();
+        driver = broserSettings.testChromeBrowser();
         ManePage manePage = new ManePage(driver);
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(15));
         driver.get("https://qa-scooter.praktikum-services.ru/");
@@ -61,15 +59,4 @@ public class FaqTest {
         Assert.assertEquals("Не совпадает текст ответа",answer, actualText);
     }
 
-    private void testChromeBrowser(){
-        ChromeOptions chromeOptions = new ChromeOptions();
-        chromeOptions.addArguments("--start-maximized", "--no-sandbox","--disable-dev-shm-usage");
-        driver = new ChromeDriver(chromeOptions);
-    }
-
-    private void testFireFoxBrowser(){
-        FirefoxOptions firefoxOptions = new FirefoxOptions();
-        firefoxOptions.addArguments("--kiosk","--no-sandbox","--disable-dev-shm-usage");
-        driver = new FirefoxDriver(firefoxOptions);
-    }
 }
