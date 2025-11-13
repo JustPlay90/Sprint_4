@@ -17,7 +17,7 @@ import java.time.Duration;
 public class OrderTest {
 
     private WebDriver driver;
-    private BroserSettings broserSettings;
+    private BroserSettings settings = new BroserSettings();
 
     private final String name;
     private final String surname;
@@ -58,8 +58,8 @@ public class OrderTest {
     }
     @Before
     public void startDriver() throws InterruptedException {
-            //driver = broserSettings.testFireFoxBrowser();
-           driver = broserSettings.testChromeBrowser();
+            //driver = settings.testFireFoxBrowser();
+            driver = settings.testChromeBrowser();
             driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(15));
             driver.get("https://qa-scooter.praktikum-services.ru/");
             ManePage manePage = new ManePage(driver);
@@ -85,7 +85,7 @@ public class OrderTest {
         orderPage.setOrderParams(dateToDelliver, rentalPeriod, scooterCollor,commentForCourier);
         //Кликнуть "Да" в меню подтверждения заказа
         orderPage.clickConfirmationButton();
-        //проверить что отображается текст :"Заказ оформлен"
+        //проверить, что отображается окно:"Заказ оформлен"
         Assert.assertTrue("Окно не активно",orderPage.checkConfirmationIsActive());
     }
 }

@@ -30,7 +30,7 @@ public class OrderPage {
     private static final By orderConfirmationYesButton = By.xpath("//div[@class='Order_Buttons__1xGrp']//button[text()='Да']");
 
     //Локатор для окна "Заказ оформлен"
-    private static final By issueWindow = By.className("Order_Modal__YZ-d3");
+    private static final By issueWindow = By.xpath("//div[@class='Order_NextButton__1_rCA']/parent::div[@class='Order_Modal__YZ-d3']");
 
     //Листы для выбора из списка.
     private By listStation = By.xpath("//div[@class = 'Order_Text__2broi']");
